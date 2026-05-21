@@ -72,7 +72,5 @@ This project involves building and securing a small business network using OpenW
 AI assistance (Claude by Anthropic) was used during this project to:
 - Help understand OpenWRT nftables firewall syntax and dropbear SSH configuration
 - Help diagnose VirtualBox network adapter configuration issues
-- Assist with drafting and refining written explanations in the report
-- Help format Markdown tables and document structure
-
+  
 All practical tasks, configurations, screenshots, network diagrams, and the risk assessment were completed by the students. All AI-generated content was critically reviewed and modified before inclusion in this report.
