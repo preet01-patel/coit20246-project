@@ -1,0 +1,157 @@
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="2" value="COIT20246 — Production Network Design&#xa;Patel &amp; Associates | Rockhampton QLD&#xa;Preetkumar Navinbhai Patel (12277687) | Adheesha Jithendree Sarathkumara (12328412)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="150" y="15" width="869" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- INTERNET -->
+    <mxCell id="10" value="Internet / ISP" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="480" y="90" width="160" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- ISP Router -->
+    <mxCell id="15" value="ISP Modem/Router&#xa;Public IP (Dynamic)" style="shape=mxgraph.cisco.routers.router;html=1;pointerEvents=1;dashed=0;fillColor=#036897;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="527" y="195" width="65" height="65" as="geometry" />
+    </mxCell>
+
+    <!-- Arrow Internet to ISP -->
+    <mxCell id="16" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="10" target="15" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- OpenWRT Firewall/Router -->
+    <mxCell id="20" value="OpenWRT Router/Firewall&#xa;WAN: 87.10.1.1/24 (from ISP)&#xa;LAN: 87.10.2.1/24&#xa;DMZ: 87.10.3.1/24" style="shape=mxgraph.cisco.firewalls.firewall;html=1;pointerEvents=1;dashed=0;fillColor=#ae4132;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="527" y="310" width="65" height="65" as="geometry" />
+    </mxCell>
+
+    <!-- Arrow ISP to Firewall -->
+    <mxCell id="21" value="WAN Link&#xa;87.10.1.0/24" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;fontStyle=2;" edge="1" source="15" target="20" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- LAN Switch -->
+    <mxCell id="30" value="LAN Switch&#xa;192.168.56.0/24 (lab)&#xa;87.10.2.0/24 (production)" style="shape=mxgraph.cisco.switches.workgroup_switch;html=1;pointerEvents=1;dashed=0;fillColor=#036897;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="280" y="430" width="65" height="65" as="geometry" />
+    </mxCell>
+
+    <!-- DMZ Switch -->
+    <mxCell id="35" value="DMZ Switch&#xa;87.10.3.0/24" style="shape=mxgraph.cisco.switches.workgroup_switch;html=1;pointerEvents=1;dashed=0;fillColor=#036897;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="760" y="430" width="65" height="65" as="geometry" />
+    </mxCell>
+
+    <!-- Arrow Firewall to LAN Switch -->
+    <mxCell id="36" value="LAN&#xa;87.10.2.0/24" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;fontStyle=2;" edge="1" source="20" target="30" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Arrow Firewall to DMZ Switch -->
+    <mxCell id="37" value="DMZ&#xa;87.10.3.0/24" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;fontStyle=2;" edge="1" source="20" target="35" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Workstation 1 - IT Support -->
+    <mxCell id="40" value="IT Support Workstation&#xa;87.10.2.2/24&#xa;Windows 10" style="shape=mxgraph.cisco.computers_and_peripherals.pc;html=1;pointerEvents=1;dashed=0;fillColor=#036897;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="80" y="580" width="55" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- Workstation 2 - Admin 1 -->
+    <mxCell id="41" value="Admin Workstation 1&#xa;87.10.2.3/24&#xa;Windows 10" style="shape=mxgraph.cisco.computers_and_peripherals.pc;html=1;pointerEvents=1;dashed=0;fillColor=#036897;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="175" y="580" width="55" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- Workstation 3 - Admin 2 -->
+    <mxCell id="42" value="Admin Workstation 2&#xa;87.10.2.4/24&#xa;Windows 10" style="shape=mxgraph.cisco.computers_and_peripherals.pc;html=1;pointerEvents=1;dashed=0;fillColor=#036897;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="270" y="580" width="55" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- Workstations 4-8 Accountants -->
+    <mxCell id="43" value="Accountant WS 1&#xa;87.10.2.5/24" style="shape=mxgraph.cisco.computers_and_peripherals.pc;html=1;pointerEvents=1;dashed=0;fillColor=#036897;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="355" y="580" width="55" height="55" as="geometry" />
+    </mxCell>
+
+    <mxCell id="44" value="Accountant WS 2–5&#xa;87.10.2.6–9/24" style="shape=mxgraph.cisco.computers_and_peripherals.pc;html=1;pointerEvents=1;dashed=0;fillColor=#036897;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="440" y="580" width="55" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows workstations to LAN switch -->
+    <mxCell id="45" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="30" target="40" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="46" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="30" target="41" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="47" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="30" target="42" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="48" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="30" target="43" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="49" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="30" target="44" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Web Server in DMZ -->
+    <mxCell id="60" value="Business Web Server&#xa;87.10.3.2/24&#xa;uhttpd (OpenWRT)&#xa;HTTP Port 80" style="shape=mxgraph.cisco.servers.standard_server;html=1;pointerEvents=1;dashed=0;fillColor=#ae4132;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="680" y="580" width="55" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- File Server in DMZ -->
+    <mxCell id="61" value="File Server&#xa;87.10.3.3/24&#xa;Client Records" style="shape=mxgraph.cisco.servers.standard_server;html=1;pointerEvents=1;dashed=0;fillColor=#ae4132;strokeColor=#ffffff;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="790" y="580" width="55" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows DMZ switch to servers -->
+    <mxCell id="62" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="35" target="60" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="63" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="35" target="61" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Legend Box -->
+    <mxCell id="80" value="Network Zones" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="870" y="310" width="200" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="81" value="WAN Zone: 87.10.1.0/24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;align=left;" vertex="1" parent="1">
+      <mxGeometry x="870" y="340" width="200" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="82" value="LAN Zone: 87.10.2.0/24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;" vertex="1" parent="1">
+      <mxGeometry x="870" y="370" width="200" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="83" value="DMZ Zone: 87.10.3.0/24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;align=left;" vertex="1" parent="1">
+      <mxGeometry x="870" y="400" width="200" height="25" as="geometry" />
+    </mxCell>
+
+    <!-- IP Table Title -->
+    <mxCell id="90" value="Production Network — IP Address Allocation Table" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="150" y="670" width="869" height="25" as="geometry" />
+    </mxCell>
+
+    <mxCell id="91" value="Device | Interface | IP Address | Subnet Mask | Zone | Role" style="text;html=1;strokeColor=#666;fillColor=#f5f5f5;align=left;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="150" y="698" width="869" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="92" value="OpenWRT Router | WAN (eth0) | 87.10.1.1 | /24 (255.255.255.0) | WAN | Internet-facing interface" style="text;html=1;strokeColor=#dae8fc;fillColor=#dae8fc;align=left;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="150" y="718" width="869" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="93" value="OpenWRT Router | LAN (eth1) | 87.10.2.1 | /24 (255.255.255.0) | LAN | Default gateway for staff workstations" style="text;html=1;strokeColor=#d5e8d4;fillColor=#d5e8d4;align=left;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="150" y="736" width="869" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="94" value="OpenWRT Router | DMZ (eth2) | 87.10.3.1 | /24 (255.255.255.0) | DMZ | Default gateway for servers" style="text;html=1;strokeColor=#ffe6cc;fillColor=#ffe6cc;align=left;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="150" y="754" width="869" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="95" value="IT Support WS | NIC | 87.10.2.2 | /24 | LAN | IT staff workstation" style="text;html=1;strokeColor=#d5e8d4;fillColor=#ffffff;align=left;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="150" y="772" width="869" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="96" value="Admin Workstations (x2) | NIC | 87.10.2.3–4 | /24 | LAN | Administrative staff" style="text;html=1;strokeColor=#d5e8d4;fillColor=#d5e8d4;align=left;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="150" y="790" width="869" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="97" value="Accountant Workstations (x5) | NIC | 87.10.2.5–9 | /24 | LAN | Accounting staff" style="text;html=1;strokeColor=#d5e8d4;fillColor=#ffffff;align=left;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="150" y="808" width="869" height="18" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
