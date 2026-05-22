@@ -1,87 +1,76 @@
 # Task 4.3 — Risk Assessment and Security Controls
 
-## 4.3.1 Cyber Security Risk Assessment
+## 4.3.1 Risk Assessment
 
-A mini cyber security risk assessment was conducted for Patel & Associates using the TVAMatrix framework provided in the unit. The assessment covers the network built in Tasks 4.1 and 4.2, and references specific configurations such as firewall rules, hardening steps, and traffic analysis findings where relevant.
+We used the TVAMatrix framework provided in the unit to do a mini risk assessment for Patel & Associates. The full spreadsheet is in the risk-assessment folder. Below is a summary of how we approached it.
 
 ### Scope
 
-The risk assessment covers the small business office network including: the OpenWRT router/firewall, staff Windows workstations, the business web server, client financial records, and staff data. The assessment considers the business context — a professional accounting firm handling sensitive client financial data in Rockhampton, QLD.
+The assessment covers the network we built — the OpenWRT router, staff workstations, the web server, and the data the business handles. The most significant assets from a security perspective are the client financial records and personal information, since an accounting firm is legally required under the Australian Privacy Act to protect that data.
 
-### TVAMatrix Risk Assessment
+We covered 10 of the 12 threat categories and included 14 assets across all four asset types (Data, Hardware, Software, People). The four data assets are: client financial records, client personal information, business financial data, and staff credentials.
 
-The completed risk assessment is available in the spreadsheet:
-[risk-assessment.xlsx](risk-assessment/risk-assessment.xlsx)
+### TVAMatrix
 
-The TVAMatrix considers vulnerabilities across the following threat categories covered in the assessment:
+![Figure 44](images/Figure%2044%20-%20TVAMatrix%20Risk%20Assessment.png)
 
-1. Unauthorised Access
-2. Malware / Ransomware
-3. Phishing / Social Engineering
-4. Denial of Service (DoS)
-5. Data Interception (Man-in-the-Middle)
-6. Physical Security Breach
-7. Insider Threat
-8. Weak Authentication
-9. Unpatched Software / Vulnerabilities
-10. Misconfigured Firewall
-11. Data Loss / Accidental Deletion
-12. Third-Party / Supply Chain Risk
+*Completed TVAMatrix showing all assets, threats, vulnerabilities, likelihood, impact and risk ratings.*
 
-**TVAMatrix Screenshot:**
+[Full spreadsheet: risk-assessment.xlsx](risk-assessment/risk-assessment.xlsx)
 
-![TVAMatrix Risk Assessment](images/Figure%2044%20-%20TVAMatrix%20Risk%20Assessment.png)
+### Key Findings
 
-*Completed TVAMatrix showing assets, threats, vulnerabilities, likelihood, impact, and risk ratings for Patel & Associates.*
+The highest-rated risks were around client financial records being exposed through software attacks (particularly ransomware) and through data interception on the network. The HTTP traffic capture in Section 4.2.2 directly demonstrated that unencrypted traffic exposes content to anyone on the network — that's not a theoretical risk, we showed it happening.
+
+Staff behaviour also came up as a significant risk area. Phishing and accidental data disclosure (like emailing a client file to the wrong address) ranked moderately because they're fairly likely in a small office where staff may not have had formal security training.
 
 ---
 
-## 4.3.2 Recommended Security Controls
+## 4.3.2 Security Controls
 
-### Highest Risk Asset
-
-Based on the TVAMatrix, **client financial records** (tax returns, financial statements, and payroll data stored on the file server) received the highest risk rating. This asset is highly sensitive under Australian Privacy Act obligations, is a prime target for ransomware and data theft, and its compromise would cause severe reputational and legal consequences for the business.
-
-The primary threat identified for this asset is **unauthorised access combined with data interception**, which directly relates to the HTTP traffic capture finding in Section 4.2.2 — data transmitted over unencrypted HTTP is fully visible to any network attacker.
+The asset with the highest risk rating is **client financial records** (tax returns, financial statements, client data stored on the file server). We've selected three controls that would most directly reduce the risk to this asset.
 
 ---
 
-### Control 1 — Access Control (AC-3: Access Enforcement) — NIST SP800-53
+### Control 1 — Access Control (NIST SP800-53: AC-3)
 
-**How it reduces risk:** Access control ensures that only authorised staff can access client financial records. By implementing role-based access, accountants can only access their own clients' files, administrative staff cannot access financial data, and the IT officer has system-level access without necessarily accessing client content. This directly reduces the risk of insider threats and unauthorised access.
+The idea here is that not everyone in the office should be able to access all client files. An admin staff member has no legitimate reason to open a client's tax return — that's an accountant's job. Role-based access control means each person can only access what they actually need for their role.
 
-**Implementation in this scenario:**
-- On the file server (87.10.3.3 in production), configure Windows NTFS folder permissions so each accountant has read/write access only to their assigned client folders
-- The IT support officer account is granted system administration rights but not read access to client data folders
-- Administrative staff accounts are restricted to shared reception folders only
-- The OpenWRT firewall rules configured in Section 4.1.3 already restrict which internal IPs can reach the file server on port 445 (SMB)
+In practice for Patel & Associates this would mean:
+- Each accountant gets read/write access only to their assigned client folders on the file server (87.10.3.3 in the production network)
+- Admin staff get access to shared scheduling and correspondence folders only
+- The IT officer gets system-level access to manage the server but not necessarily read access to client documents
+- Access is tied to individual Windows user accounts, not shared passwords
 
-**Disadvantages:** Role-based access requires ongoing maintenance — when staff change roles or new clients are assigned, permissions must be updated manually. If the IT officer is unavailable, there is no one to grant emergency access, which could interrupt business operations during urgent situations.
+This directly links to the firewall work we did — the firewall rules in Section 4.1.3 already restrict which IPs can reach which services. Access control at the file system level adds another layer on top of that. Even if someone gets onto the network, they still can't open files they don't have permissions for.
 
----
-
-### Control 2 — System and Communications Protection (SC-8: Transmission Confidentiality) — NIST SP800-53
-
-**How it reduces risk:** As demonstrated in the HTTP traffic capture (Section 4.2.2), unencrypted data is fully visible to any attacker on the network. Enforcing encrypted communications (HTTPS for the web server, SFTP/SCP for file transfers, encrypted email) ensures that even if traffic is intercepted, it cannot be read. This directly mitigates the data interception risk for client financial records.
-
-**Implementation in this scenario:**
-- Replace the current HTTP web server with HTTPS by generating an SSL/TLS certificate for the OpenWRT uhttpd server (Let's Encrypt for production, self-signed for internal use)
-- The existing firewall rule demonstrated in Section 4.1.3 that blocks port 80 can be permanently applied, forcing all web traffic to port 443 (HTTPS)
-- Configure Windows workstations to use encrypted file sharing protocols (SMB over TLS or SFTP) when accessing the file server
-- Implement encrypted email (S/MIME or PGP) for sending client financial documents
-
-**Disadvantages:** SSL/TLS certificates require renewal (typically every 90 days for Let's Encrypt), adding an ongoing maintenance task. Older client browsers or systems may not support modern TLS versions, potentially causing access issues. Staff training is required to understand why HTTPS warnings should not be bypassed.
+The downside is maintenance overhead. When an accountant takes on a new client, someone has to update the permissions. When a staff member leaves, their account needs to be deactivated promptly. In a small business with no dedicated IT staff this can slip — especially during busy periods like tax season.
 
 ---
 
-### Control 3 — Audit and Accountability (AU-2: Event Logging) — NIST SP800-53
+### Control 2 — Transmission Encryption (NIST SP800-53: SC-8)
 
-**How it reduces risk:** Comprehensive logging of access to client financial records means that any unauthorised access or unusual activity can be detected and investigated. Without logs, a data breach may go undetected for weeks or months. Logs also provide forensic evidence if a breach occurs and are required for Australian Privacy Act compliance when reporting notifiable data breaches.
+The HTTP capture showed exactly why this matters. Everything sent over HTTP is readable to anyone who can see the traffic. For a business that handles financial data, running HTTP is genuinely risky — not just for the website but for any internal system that uses unencrypted connections.
 
-**Implementation in this scenario:**
-- Enable OpenWRT firewall logging for all inbound and outbound connections — this builds on the nftables rules configured in Section 4.1.3 by adding a log action before the drop/accept action
-- Enable Windows file auditing on the file server so that every access to client folders is recorded with timestamp, username, and action performed
-- Configure log forwarding to a central syslog server (can be the IT support workstation at 87.10.2.2) so logs are stored off the router and cannot be tampered with
-- Review logs weekly — the IT support officer should check for failed login attempts, after-hours access, and large file downloads
+For this business the control would involve:
+- Replacing the current HTTP web server with HTTPS by adding a TLS certificate to uhttpd. The firewall rule we demonstrated in Section 4.1.3 that blocks port 80 could be made permanent, forcing all connections to port 443
+- Using encrypted protocols for internal file transfers (SFTP rather than FTP if files are transferred between machines)
+- Making sure accounting software communicates with any cloud services over HTTPS
 
-**Disadvantages:** Logging generates large volumes of data that must be stored and managed. Without automated alerting tools, manual log review is time-consuming and may be deprioritised during busy periods. Log storage on a small business server may become a cost and capacity issue over time.
+This is one of the more impactful controls because it addresses the vulnerability we literally demonstrated in this project. The capture showed our names and page content in plaintext — if that had been a login form or a file transfer it would have been much worse.
+
+The trade-off is certificate management. TLS certificates expire and need to be renewed. Let's Encrypt automates this for free but someone needs to set it up and make sure the renewal process works. For a small business without dedicated IT support, this could become a problem if the certificate expires and nobody notices until clients report the site is showing security warnings.
+
+---
+
+### Control 3 — Audit Logging (NIST SP800-53: AU-2)
+
+Without logs, you can't tell if someone accessed files they shouldn't have, or whether an attack happened at all. For an accounting firm, logs also matter for compliance — if there's ever a data breach, the business needs to report it under the Notifiable Data Breaches scheme and demonstrate what happened and when.
+
+Implementation would look like:
+- Enable logging on the OpenWRT firewall so every connection attempt is recorded. This builds on the nftables rules from Section 4.1.3 — you can add a log action before the drop/accept to record what was blocked and allowed
+- Enable Windows file auditing on the file server so access to client folders is logged with username, timestamp and action
+- Store logs somewhere other than the router itself — ideally send them to the IT officer's workstation (87.10.2.2) using syslog so they can't be tampered with if the router is compromised
+- Review logs regularly, at minimum weekly, looking for failed logins, after-hours access, or large file downloads
+
+The practical challenge is that logs generate a lot of data and reviewing them takes time. A small business might set up logging and then never look at it because there's always something more urgent to deal with. Without some kind of alerting on suspicious events, logs only become useful after something has already gone wrong. That said, having them at all is significantly better than not — forensic investigation after a breach is much harder without a log trail.
