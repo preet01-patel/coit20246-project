@@ -1,82 +1,78 @@
 # Task 4.4 — Project Reflection
 
-## Group Members
-
-| Student Name | Student ID |
+| Name | Student ID |
 |---|---|
 | Preetkumar Navinbhai Patel | 12277687 |
 | Galbokke Hewage Adheesha Jithendree Sarathkumara | 12328412 |
 
 ---
 
-## 1. GitHub Commit History
-
-The following screenshot shows the commit history from both team members across the project period.
+## 1. Commit History
 
 **Figure 43 — GitHub commit history showing commits from both team members**
 
 ![Figure 43](images/Figure%2043%20-%20GitHub%20commits.png)
 
-*GitHub repository commit history showing contributions from both Preetkumar and Adheesha across the project timeline.*
+*GitHub commit history for the coit20246-project repository.*
 
 ---
 
-## 2. Task Split
+## 2. How We Split the Work
 
-The following table shows the actual division of tasks completed by each student:
-
-| Task | Description | Completed By |
-|---|---|---|
-| VM Installation & Network Setup | VirtualBox, OpenWRT install, adapter configuration | Both |
-| SSH Access Fix | Diagnosing and resolving host-only network routing issues | Preetkumar |
-| Web Server Setup | uhttpd install, HTML page creation, browser verification | Both |
-| Firewall Rule 1 — HTTP Block/Allow | nftables rules, before/after screenshots | Preetkumar |
-| Firewall Rule 2 — SSH Port Change | dropbear UCI config, port 22 vs 2222 testing | Adheesha |
-| Firewall Rule 3 — ICMP Block/Allow | nftables ICMP rules, ping testing | Preetkumar |
-| Firewall Rule 4 — Port 81 Restriction | Management interface access control | Adheesha |
-| Hardening — Password Change | passwd, shadow file examination | Adheesha |
-| Hardening — SSH Key Authentication | Key generation, authorized_keys, passwordless login | Both |
-| Hardening — Disable Services | odhcpd identification and disabling | Preetkumar |
-| HTTP Traffic Capture | tcpdump, Wireshark HTTP analysis | Both |
-| SSH Traffic Capture | tcpdump, Wireshark SSH analysis | Both |
-| Network Diagrams | draw.io lab and production diagrams | Preetkumar |
-| Risk Assessment — TVAMatrix | Threats, vulnerabilities, asset analysis | Both |
-| Security Controls | Selecting and explaining three controls | Adheesha |
-| Report Writing | All Markdown files | Both |
-| Video Demonstration | Recording and editing | Both |
+| Task | Who Did It |
+|---|---|
+| VirtualBox and OpenWRT installation | Preetkumar |
+| Network adapter configuration and SSH troubleshooting | Preetkumar |
+| Web server setup and HTML page | Both |
+| Firewall rules 1 and 3 (HTTP and ICMP) | Preetkumar |
+| Firewall rules 2 and 4 (SSH port and port 81) | Adheesha |
+| Password change and shadow file analysis | Adheesha |
+| SSH key generation and setup | Both |
+| Disabling odhcpd service | Preetkumar |
+| HTTP and SSH traffic captures | Both |
+| Wireshark analysis | Both |
+| draw.io network diagrams | Preetkumar |
+| TVAMatrix risk assessment | Both |
+| Security controls write-up | Adheesha |
+| Report writing (all .md files) | Both |
+| Video recording | Both |
 
 ---
 
-## 3. Git Commits vs Contributions
+## 3. Commits vs Actual Contributions
 
-Preetkumar made a higher number of commits than Adheesha overall, which reflects his primary role in diagnosing the network configuration issues early in the project. The VirtualBox host-only network problem required many iterative attempts — each attempted fix and verification was committed separately, resulting in a larger commit count for that period. Adheesha's commits were fewer but covered larger units of work, particularly the hardening steps and security controls section which were researched and written in longer sessions. The number of commits is therefore not directly proportional to contribution — Adheesha's fewer commits still represent equal effort in terms of time and quality of work produced.
+Preetkumar has more commits than Adheesha, but that's mostly because of the network setup phase early in the project. Getting the host-only adapter to work properly took a lot of trial and error — each attempt to fix the routing was a separate commit. That period generated a high commit count for Preetkumar that doesn't really reflect more contribution, just more iterations on a tricky problem.
+
+Adheesha's commits tend to cover bigger chunks of work done in fewer sessions. The security controls section and the risk assessment write-up were both done in longer focused sessions with fewer but larger commits. So the raw commit numbers don't tell the whole story about who did what.
+
+From about Week 6 onward both of us were committing regularly each week. The early weeks were mostly Preetkumar because the setup work was happening on his machine.
 
 ---
 
 ## 4. Weekly Commit Activity
 
-Both students made commits during Weeks 5 through 12 of the term. The most active weeks were Weeks 5–6 (network setup and firewall rules) and Week 10 (report writing). There were two weeks — Weeks 3 and 4 — where only Preetkumar committed, as the initial VM setup was being done on his machine before SSH was available for collaborative access. From Week 5 onwards both students committed every week they worked on the project. We consider this sufficient given the nature of the tasks, though in hindsight earlier collaboration would have been more balanced.
+Both of us were active in the repository from Week 5 through to Week 12. The weeks with the most activity were Week 6 (firewall rules), Week 8 (traffic captures), and Week 10 (report writing). There were a couple of weeks early on where only Preetkumar committed because the VM setup was on his machine and we hadn't sorted out a workflow for both of us to contribute yet. From Week 5 onwards it was more consistent. Looking back we probably should have started committing together earlier, but once we had SSH working it became much easier to collaborate.
 
 ---
 
-## 5. What Worked Well and Lessons Learned
+## 5. What Worked, What Didn't, and What We'd Do Differently
 
-### What Worked Well
+### Things that went well
 
-**Using SSH for all OpenWRT management** worked extremely well once it was set up. Being able to copy-paste commands directly into the SSH terminal from Windows eliminated the error-prone manual typing that caused problems during the initial VM console setup phase. We would strongly recommend any future group establish SSH access as the very first priority before attempting any other configuration.
+WhatsApp worked really well for day-to-day coordination. Being able to send a quick message like "SSH is working now, your turn to test it" or share a screenshot of something that didn't work was much faster than scheduling a call every time. We didn't have many situations where one of us was blocked waiting for the other.
 
-**WhatsApp for quick coordination** was effective for sharing screenshots and quick status updates between working sessions. Messages were responded to within a few hours, keeping the project moving without needing to schedule a Zoom call for every small question.
+Splitting the firewall rules between us so we each did two of them was a good call. It meant both of us had to actually understand how nftables works rather than one person doing all of it while the other watched.
 
-### Issues Encountered
+### Problems we ran into
 
-**VirtualBox network adapter configuration** was the most significant challenge. The host-only network routing conflict between eth1 and br-lan caused several hours of troubleshooting. The root cause was that OpenWRT's br-lan bridge claimed the entire 192.168.56.0/24 subnet route, preventing eth1 replies from reaching Windows. This was resolved using `ip route del` and made permanent via `/etc/rc.local`. Future groups should verify SSH connectivity before proceeding to any other task.
+The network setup at the beginning took much longer than expected. The issue with the br-lan bridge claiming the 192.168.56.0/24 route and blocking replies wasn't obvious at first. We spent a fair amount of time on it before figuring out that the problem was conflicting routes rather than a firewall issue. In hindsight, running `ip route show` earlier would have pointed us to it faster.
 
-**Copy-paste not working in the VirtualBox VM console** was an unexpected difficulty. OpenWRT does not support VirtualBox Guest Additions, so the shared clipboard option does not work. All commands had to be typed manually in the console until SSH was available. Future groups should be aware of this limitation from the start.
+Another thing that caught us off guard was that VirtualBox clipboard sharing doesn't work with OpenWRT. The Guest Additions that enable clipboard sharing aren't compatible with OpenWRT's minimal Linux environment. That made the early console work much slower because every command had to be typed manually. Once we got SSH working that problem went away entirely.
 
-### Techniques for Future Group Projects
+### What we'd recommend for future group projects
 
-**Technique 1 — Establish remote access first:** Before doing any practical configuration work, verify that SSH or some remote access method is working. This single step would have saved several hours of troubleshooting in this project, because all subsequent configuration could then be done via copy-paste rather than error-prone manual typing.
+**Sort out remote access first.** Before doing any configuration work, make sure you have a reliable way to send commands without having to type them manually in the VM console. In our case that meant getting SSH working as the first priority. It's tempting to jump straight into the actual tasks but fixing the workflow early saves a lot of time later.
 
-**Technique 2 — Commit after every discrete task:** We agreed to commit after every meaningful change, such as adding a screenshot or completing a section of the report. This created a clear record of progress and made it easy to revert if something went wrong. Future groups should define what constitutes a "commit-worthy" action at the start of the project.
+**Define what a commit is before you start.** We agreed in general terms to commit regularly, but we didn't define what that meant precisely. Some sessions one person would make five small commits and the other would make one big one covering the same amount of work. If we'd agreed upfront on something like "commit after each completed sub-task" it would have been more consistent and the commit history would be a more accurate reflection of progress.
 
-**Technique 3 — Document assumptions explicitly before starting practical work:** Taking time in Week 3 to agree on the business scenario, IP addressing scheme, and network design before touching the VM meant we never had to redo practical work due to a planning oversight. This technique solves the common problem of rework caused by unclear requirements.
+**When something isn't working, check the basics before going deep.** We spent time troubleshooting SSH connectivity when the actual problem was a routing conflict that would have taken one command to spot. Checking `ip route show` and `ip addr` systematically before trying more complex fixes would have saved time. It's easy to assume the problem is in the thing you were just configuring when it's actually somewhere completely different.
