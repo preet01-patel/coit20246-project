@@ -16,7 +16,7 @@ We covered 10 of the 12 threat categories and included 14 assets across all four
 
 *Completed TVAMatrix showing all assets, threats, vulnerabilities, likelihood, impact and risk ratings.*
 
-[Full spreadsheet: risk-assessment.xlsx](risk-assessment/risk-assessment.xlsx)
+[Full spreadsheet: risk-assessment.xlsx](risk-assessment/TVA-Matrix-Risk-Assessment.xlsx)
 
 ### Key Findings
 
